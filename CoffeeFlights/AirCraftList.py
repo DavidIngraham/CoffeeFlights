@@ -22,7 +22,7 @@ class AirCraftList:
             try:
                 tail_number = new_aircraft_dict['Reg']
             except KeyError as e:
-                print(e)
+                # print(e)
                 new = False
             else:
                 for i in self.aircraft_object_list:
@@ -39,7 +39,8 @@ class AirCraftList:
                 try:
                     new_aircraft_tail_number = new_aircraft['Reg']
                 except KeyError as e:
-                    print(e)
+                    # print(e)
+                    pass
                 else:
                     if self.aircraft_object_list[i].tail_number == new_aircraft_tail_number:
                         current = True

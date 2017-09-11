@@ -21,18 +21,41 @@ class AirCraft:
         self.update(data)
 
     def update(self, data):
-        try:
-            self.dict = data
-            self.tail_number = data['Reg']
-            self.call_sign = data['Call']
-            self.lat = float(data['Lat'])
-            self.lng = float(data['Long'])
-            self.alt_msl = int(data['GAlt'])
-            self.speed = int(data['Spd'])
-            self.track = int(data['Trak'])
-            self.range_from_radar = float(data['Dst'])
-            self.bearing_from_radar = int(data['Brng'])
-            self.model = data['Mdl']
-        except KeyError as e:
-            print(e)
+        def try_update(key):
+            try:
+                new_value = data[key]
+            except KeyError as e:
+                #print('This Stupid Plane Doesn\'t Tell Us About', e)
+                new_value = None
+            return new_value
+
+        def try_update_int(key):
+            try:
+                new_value = int(data[key])
+            except KeyError as e:
+                #print('This Stupid Plane Doesn\'t Tell Us About', e)
+                new_value = None
+            return new_value
+
+        def try_update_float(key):
+            try:
+                new_value = float(data[key])
+            except KeyError as e:
+                #print('This Stupid Plane Doesn\'t Tell Us About', e)
+                new_value = None
+            return new_value
+
+        self.dict = data
+        self.tail_number = try_update('Reg')
+        self.call_sign = try_update('Call')
+        self.lat = try_update_float('Lat')
+        self.lng = try_update_float('Long')
+        self.alt_msl = try_update_int('GAlt')
+        self.speed = try_update_int('Spd')
+        self.track = try_update_int('Trak')
+        self.range_from_radar = try_update_float('Dst')
+        self.bearing_from_radar = try_update_int('Brng')
+        self.model = try_update('Mdl')
+
+
 
