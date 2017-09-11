@@ -48,6 +48,8 @@ class AirCraft:
         self.dict = data
         self.tail_number = try_update('Reg')
         self.call_sign = try_update('Call')
+        if self.call_sign is None:
+            self.call_sign = self.tail_number
         self.lat = try_update_float('Lat')
         self.lng = try_update_float('Long')
         self.alt_msl = try_update_int('GAlt')
