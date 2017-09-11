@@ -14,9 +14,9 @@ class Radar:
 
     def __init__(self):
         self.airport_string = 'KPHX'
-        self.radar_location = (33.4299930, -111.9348270, 1134)  # Lat/Lon/alt of virtual radar
+        self.radar_location = (33.4299930, -111.9348270, 1100)  # Lat/Lon/alt of virtual radar
         self.range = 50  # Max range filter, kilometers
-        self.max_alt_agl = 1000
+        self.max_alt_agl = 3000
         response = self.get_radar_data()
         self.aircraft_list = AirCraftList(response['acList'])
 
