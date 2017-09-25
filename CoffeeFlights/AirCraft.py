@@ -59,5 +59,8 @@ class AirCraft:
         self.bearing_from_radar = try_update_int('Brng')
         self.model = try_update('Mdl')
 
+    def get_interpolated_position(self):
+        pass
+
 
 
