@@ -49,6 +49,11 @@ class AirCraftList:
             if not current:
                 del(self.aircraft_object_list[i])
 
+    def interpolate_all(self):
+        print(self.aircraft_object_list)
+        for i in range(0, len(self.aircraft_object_list)):
+            self.aircraft_object_list[i].interpolate_position()
+
     def __iter__(self):
         return self
 

@@ -1,4 +1,5 @@
 import requests, json
+from json import JSONDecodeError
 from CoffeeFlights.AirCraftList import AirCraftList
 RADAR_BASE_URL = 'https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json'
 # Example Query String: ?lat=33.433638&lng=-112.008113&fDstL=0&fDstU=100
@@ -29,20 +30,24 @@ class Radar:
             'lng': str(self.radar_location[1]),
             # 'fDstL': 0,
             # 'fDstU': str(self.range),
-            'fAirS': self.airport_string,  # Filter flights by airport code. Most flights don't seem to report this
+            # 'fAirS': self.airport_string,  # Filter flights by airport code. Most flights don't seem to report this
             'fAltL': str(self.radar_location[2]),
             'fAltU': str(self.radar_location[2] + self.max_alt_agl),
             'fNBnd': str(self.bounds[0]),
             'fSBnd': str(self.bounds[1]),
             'fEBnd': str(self.bounds[2]),
-            'fWBnd': str(self.bounds[3]),
-
+            'fWBnd': str(self.bounds[3])
         }
         response = requests.request('GET', RADAR_BASE_URL, params=request_parameters)
-        return response.json()
+        try:
+            return response.json()
+        except JSONDecodeError:
+            return None
 
     def update_aircraft_list(self):
         response = self.get_radar_data()
-        self.aircraft_list.update(response['acList'])
+        if response is not None:
+            self.aircraft_list.update(response['acList'])
+
 
 
