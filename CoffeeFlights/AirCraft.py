@@ -70,20 +70,22 @@ class AirCraft:
 
         if None in [self.speed, self.track, self.timestamp, self.lat_raw, self.lng_raw] :
             self.lat, self.lng = self.lat_raw, self.lng_raw
-            print("Can't Interpolate", self.call_sign)
             return False
-
         delta_t = (time.time() - self.timestamp)/3600  # hours
-        delta_x = abs(self.speed * delta_t) # offset distance in nm
+        delta_x = max(self.speed * delta_t, 0) # offset distance in nm
 
         # Get updated location using geopy lib
         reported_location = geopy.Point(latitude=self.lat_raw, longitude=self.lng_raw)
         offset_km = distance(nautical=delta_x)
+
+        if offset_km.kilometers > 10:
+            # If it's too unreasonable don't interpolate
+            self.lat, self.lng = self.lat_raw, self.lng_raw
+            return False
+
         updated_location = offset_km.destination(reported_location, self.track)
         self.lat = updated_location.latitude
         self.lng = updated_location.longitude
-        print("Interpolated", self.call_sign)
-
         return True
 
     def __repr__(self):

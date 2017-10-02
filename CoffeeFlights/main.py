@@ -11,7 +11,9 @@ def request_thread():
     while True:
         print('Updating:', time.ctime())
         radar.update_aircraft_list()
-        time.sleep(5)
+        for plane in radar.aircraft_list:
+            print(plane.call_sign, plane.lat, plane.lng, plane.alt_msl, plane.model)
+        time.sleep(1)
 
 
 if __name__ == '__main__':
@@ -20,18 +22,19 @@ if __name__ == '__main__':
     plt.ion()
 
     while True:
+        radar.aircraft_list.interpolate_all()
+        plt.clf()
         axes = plt.gca()
         axes.set_xlim([bounds[3], bounds[2]])
         axes.set_ylim([bounds[1], bounds[0]])
-        radar.aircraft_list.interpolate_all()
+
         for plane in radar.aircraft_list:
-            print(plane.call_sign, plane.lat, plane.lng, plane.alt_msl, plane.model)
             plt.scatter(plane.lng, plane.lat)
-            plt.pause(0.001)
+            plt.pause(0.0001)
 
         plt.draw()
-        plt.pause(.2)
-        plt.clf()
+        plt.pause(.5)
+
 
 
 

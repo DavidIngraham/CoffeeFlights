@@ -16,37 +16,33 @@ class AirCraftList:
             self.aircraft_object_list.append(AirCraft(aircraft_dict))
 
     def update(self, new_aircraft_list_dict):
-        # Add any New AirCraft
-        for new_aircraft_dict in new_aircraft_list_dict:
-            new = True
-            try:
-                tail_number = new_aircraft_dict['Reg']
-            except KeyError as e:
-                # print(e)
-                new = False
-            else:
+        # Add any valid New AirCraft unless they have a stale position
+        for aircraft_dict in new_aircraft_list_dict:
+            # Read the tail number
+            tail_number = aircraft_dict.get('Reg')
+            # Check if the tail number is present
+            if tail_number is not None:
+                # Check if it's in the list already, continue to the next if so, else, add it to the list
                 for i in self.aircraft_object_list:
                     if i.tail_number == tail_number:
-                        new = False
                         break
-            if new:
-                self.aircraft_object_list.append(AirCraft(new_aircraft_dict))
+                else:
+                    if not aircraft_dict.get('PosStale'):
+                        self.aircraft_object_list.append(AirCraft(aircraft_dict))
+
         # Update any aircraft already in list. Iterate backwards so we can delete planes that longer tracked
         for i in reversed(range(len(self.aircraft_object_list))):
-            current = False
             # Iterate through all new data to check if the Tail number is still there
-            for new_aircraft in new_aircraft_list_dict:
-                try:
-                    new_aircraft_tail_number = new_aircraft['Reg']
-                except KeyError as e:
-                    # print(e)
-                    pass
-                else:
+            for aircraft_dict in new_aircraft_list_dict:
+                new_aircraft_tail_number = aircraft_dict.get('Reg')
+                if new_aircraft_tail_number is not None:
                     if self.aircraft_object_list[i].tail_number == new_aircraft_tail_number:
-                        current = True
-                        self.aircraft_object_list[i].update(new_aircraft)
+                        self.aircraft_object_list[i].update(aircraft_dict)
                         break
-            if not current:
+                else:
+                    # Break here to ensure that an aircraft isn't deleted when a bad key comes in
+                    break
+            else:
                 del(self.aircraft_object_list[i])
 
     def interpolate_all(self):
