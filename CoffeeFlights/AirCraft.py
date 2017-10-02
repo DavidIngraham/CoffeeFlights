@@ -30,41 +30,20 @@ class AirCraft:
 
     def update(self, data):
         self.dict = data
-        self.tail_number = self.try_update('Reg')
-        self.call_sign = self.try_update('Call')
+        self.tail_number = data.get('Reg')
+        self.call_sign = data.get('Call')
         if self.call_sign is None:
             self.call_sign = self.tail_number
-        self.lat_raw = self.try_update_float('Lat')
-        self.lng_raw = self.try_update_float('Long')
-        self.alt_msl = self.try_update_int('GAlt')
-        self.speed = self.try_update_int('Spd')
-        self.track = self.try_update_int('Trak')
-        self.range_from_radar = self.try_update_float('Dst')
-        self.bearing_from_radar = self.try_update_int('Brng')
-        self.model = self.try_update('Mdl')
-        self.timestamp = self.try_update_float('PosTime')/1000
+        self.lat_raw = float(data.get('Lat'))
+        self.lng_raw = float(data.get('Long'))
+        self.alt_msl = int(data.get('GAlt'))
+        self.speed = data.get('Spd')
+        self.track = int(data.get('Trak'))
+        self.range_from_radar = float(data.get('Dst'))
+        self.bearing_from_radar = float(data.get('Brng'))
+        self.model = data.get('Mdl')
+        self.timestamp = data.get('PosTime')/1000
         self.interpolated = self.interpolate_position()
-
-    def try_update(self, key):
-        try:
-            new_value = self.dict[key]
-        except KeyError as e:
-            new_value = None
-        return new_value
-
-    def try_update_int(self, key):
-        try:
-            new_value = int(self.dict[key])
-        except KeyError as e:
-            new_value = None
-        return new_value
-
-    def try_update_float(self, key):
-        try:
-            new_value = float(self.dict[key])
-        except KeyError as e:
-            new_value = None
-        return new_value
 
     def interpolate_position(self):
 
