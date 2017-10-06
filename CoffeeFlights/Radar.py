@@ -1,4 +1,4 @@
-import requests, json
+import requests
 from json import JSONDecodeError
 from CoffeeFlights.AirCraftList import AirCraftList
 RADAR_BASE_URL = 'https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json'
@@ -47,6 +47,7 @@ class Radar:
 
     def update_aircraft_list(self):
         response = self.get_radar_data()
+        print(response)
         if response is not None:
             self.aircraft_list.update(response['acList'])
 

@@ -2,7 +2,9 @@ import time, threading
 import matplotlib.pyplot as plt
 from CoffeeFlights.Radar import Radar
 
+
 radar = Radar()
+
 
 bounds = (33.465673, 33.4074764, -111.848405, -112.030175)  # NSEW Bounds
 

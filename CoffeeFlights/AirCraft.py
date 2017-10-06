@@ -26,6 +26,7 @@ class AirCraft:
         self.model = None
         self.timestamp = None
         self.interpolated = False
+        self.clock_offset = 0
         self.update(data)
 
     def update(self, data):
@@ -38,7 +39,7 @@ class AirCraft:
         self.lng_raw = float(data.get('Long'))
         self.alt_msl = int(data.get('GAlt'))
         self.speed = data.get('Spd')
-        self.track = int(data.get('Trak'))
+        self.track = data.get('Trak')
         self.range_from_radar = float(data.get('Dst'))
         self.bearing_from_radar = float(data.get('Brng'))
         self.model = data.get('Mdl')
@@ -47,10 +48,13 @@ class AirCraft:
 
     def interpolate_position(self):
 
-        if None in [self.speed, self.track, self.timestamp, self.lat_raw, self.lng_raw] :
+        if None in [self.speed, self.track, self.timestamp, self.lat_raw, self.lng_raw]:
             self.lat, self.lng = self.lat_raw, self.lng_raw
             return False
         delta_t = (time.time() - self.timestamp)/3600  # hours
+        if delta_t < self.clock_offset:
+            self.clock_offset = delta_t
+        delta_t += self.clock_offset
         delta_x = max(self.speed * delta_t, 0) # offset distance in nm
 
         # Get updated location using geopy lib
