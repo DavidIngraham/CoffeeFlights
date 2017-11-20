@@ -1,8 +1,9 @@
 import requests
 from json import JSONDecodeError
 from CoffeeFlights.AirCraftList import AirCraftList
-RADAR_BASE_URL = 'https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json'
+#RADAR_BASE_URL = 'https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json'
 #RADAR_BASE_URL = 'http://n7uv.dyndns.org:9080/VirtualRadar/AircraftList.json'
+RADAR_BASE_URL = 'http://10.0.1.2:8080/VirtualRadar/AircraftList.json'
 
 
 
