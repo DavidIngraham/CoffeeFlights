@@ -1,9 +1,9 @@
 import requests
 from json import JSONDecodeError
 from CoffeeFlights.AirCraftList import AirCraftList
-#RADAR_BASE_URL = 'https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json'
+RADAR_BASE_URL = 'https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json'
 #RADAR_BASE_URL = 'http://n7uv.dyndns.org:9080/VirtualRadar/AircraftList.json'
-RADAR_BASE_URL = 'http://10.0.1.2:8080/VirtualRadar/AircraftList.json'
+#RADAR_BASE_URL = 'http://10.0.1.2:8080/VirtualRadar/AircraftList.json'
 
 
 
@@ -48,7 +48,8 @@ class Radar:
 
     def update_aircraft_list(self):
         response = self.get_radar_data()
-        print(response)
+        #print response prints entire json message from server
+        #print(response)
         if response is not None:
             self.aircraft_list.update(response['acList'])
 
